@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GIS Portfolio – Secure Map</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Maps JS API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsF5EivOME60t4hNLhlrCrXUrEf6z9V-Y"></script>
+
+  <!-- html2canvas for PNG export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    html,body {height:100%;margin:0}
+    #sidebar {position:fixed;width:260px;top:56px;bottom:0;left:0;overflow-y:auto;
+              z-index:1030;border-right:1px solid #dee2e6;background:#f8f9fa;padding:1rem}
+    #map {position:absolute;top:56px;left:260px;right:0;bottom:0}
+    .form-check{margin-bottom:.5rem}
+    .layer-item.active label{font-weight:700}
+    #loginOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.75);
+                  display:flex;align-items:center;justify-content:center;z-index:2000}
+  </style>
+</head>
+
+<body oncontextmenu="return false" onkeydown="return disableInspect(event)">
+  <!-- Login Overlay -->
+  <div id="loginOverlay">
+    <div class="card shadow" style="min-width:320px">
+      <div class="card-header text-center bg-primary text-white">Login Required</div>
+      <div class="card-body">
+        <form id="loginForm">
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+          <div id="loginError" class="text-danger mt-2 d-none">Invalid credentials</div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">GIS Portfolio</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="about.html">About Me</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <h6 class="fw-bold mt-2">GeoJSON Layers</h6>
+    <input id="layerSearch" type="text" class="form-control mb-3" placeholder="Search layers…" autocomplete="off">
+    <div id="layerList" class="mb-3"></div>
+
+    <hr>
+    <h6 class="fw-bold mt-3 mb-2">Styling – <span id="activeLayerName">--</span></h6>
+
+    <div class="mb-2">
+      <label class="form-label">Fill Colour</label>
+      <input type="color" id="fillColor" class="form-control form-control-color">
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Fill Opacity</label>
+      <input type="range" id="fillOpacity" class="form-range" min="0" max="1" step="0.1">
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Border Weight (px)</label>
+      <input type="range" id="strokeWeight" class="form-range" min="1" max="10" step="1">
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Border Colour</label>
+      <input type="color" id="strokeColor" class="form-control form-control-color">
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="dashedBorder">
+      <label class="form-check-label" for="dashedBorder">Dashed border</label>
+    </div>
+
+    <hr>
+    <h6 class="fw-bold mt-3">Colour by Attribute</h6>
+    <select id="colorBy" class="form-select mb-3">
+      <option value="">None (manual colour)</option>
+    </select>
+
+    <h6 class="fw-bold">Label Field</h6>
+    <select id="labelField" class="form-select mb-3">
+      <option value="">None (no labels)</option>
+    </select>
+
+    <button id="btnExport" class="btn btn-outline-primary w-100">Download PNG</button>
+  </aside>
+
+  <div id="map"></div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  /* ---------- CONFIG ---------- */
+  const USERNAME_HASH=btoa("admin");
+  const PASSWORD_HASH=btoa("gis123");
+
+  const geoFiles=[
+    {file:"baga_sheikhan.geojson",label:"Baga Sheikhan"},
+    {file:"kotha_kalan.geojson",label:"Kotha Kalan"},
+    {file:"third_layer.geojson" ,label:"Third Layer"}
+  ];
+
+  /* ---------- STATE ---------- */
+  let map,dataLayer,activeInfoWindow=null;
+  const loadedLayers={};   // {file:{geojson,features}}
+  const layersMeta={};     // {file:{style,colorBy,attrColourMap,props,labelField,labelOverlay}}
+  let editLayerFile=null;  // layer being styled
+  let dashedLines=[];      // polylines for dashed outlines
+
+  /* ---------- LOGIN FLOW ---------- */
+  window.addEventListener("load",()=>{
+    document.getElementById("loginForm").addEventListener("submit",handleLogin);
+    if(localStorage.getItem("gis_auth")==="true"){
+      document.getElementById("loginOverlay").style.display="none";
+      initMap();
+    }
+  });
+
+  function handleLogin(e){
+    e.preventDefault();
+    const u=btoa(document.getElementById("username").value.trim());
+    const p=btoa(document.getElementById("password").value.trim());
+    if(u===USERNAME_HASH && p===PASSWORD_HASH){
+      localStorage.setItem("gis_auth","true");
+      document.getElementById("loginOverlay").style.display="none";
+      initMap();
+    }else document.getElementById("loginError").classList.remove("d-none");
+  }
+  function logoutUser(){localStorage.removeItem("gis_auth");location.reload();}
+  function disableInspect(e){
+    if(e.keyCode===123||(e.ctrlKey&&e.shiftKey&&["I","J","C"].includes(e.key.toUpperCase()))||(e.ctrlKey&&e.key.toUpperCase()==="U")) return false;
+  }
+
+  /* ---------- MAP ---------- */
+  function initMap(){
+    map=new google.maps.Map(document.getElementById("map"),{center:{lat:30,lng:70},zoom:6});
+    dataLayer=new google.maps.Data({map});
+
+    buildLayerList();
+    attachGlobalControlEvents();
+    attachPopupHandler();
+    initialAutoLoad();
+  }
+
+  /* ---------- UI BUILD ---------- */
+  function buildLayerList(){
+    const listDiv=document.getElementById("layerList");
+    geoFiles.forEach((g,i)=>{
+      listDiv.insertAdjacentHTML("beforeend",
+        `<div class="form-check layer-item" data-file="${g.file}">
+           <input class="form-check-input" type="checkbox" value="${g.file}" id="cb_${i}">
+           <label class="form-check-label" for="cb_${i}">${g.label}</label>
+         </div>`);
+    });
+
+    listDiv.addEventListener("click",e=>{
+      const row=e.target.closest(".layer-item"); if(!row) return;
+      const file=row.dataset.file;
+      const cb=row.querySelector("input[type=checkbox]");
+      setTimeout(()=>{ cb.checked?loadLayer(file):unloadLayer(file); });
+      setActiveLayer(file);
+    });
+
+    document.getElementById("layerSearch").addEventListener("input",e=>filterLayerList(e.target.value));
+  }
+
+  function setActiveLayer(file){
+    editLayerFile=file;
+    document.querySelectorAll(".layer-item").forEach(div=>div.classList.toggle("active",div.dataset.file===file));
+    loadControlsForLayer();
+  }
+
+  function loadControlsForLayer(){
+    const meta=layersMeta[editLayerFile];
+    const controls=["fillColor","fillOpacity","strokeWeight","strokeColor"];
+    const toToggle=controls.concat(["dashedBorder","colorBy","labelField"]);
+    if(!meta){
+      toToggle.forEach(id=>document.getElementById(id).disabled=true);
+      document.getElementById("activeLayerName").textContent="--";
+      return;
+    }
+    toToggle.forEach(id=>document.getElementById(id).disabled=false);
+    document.getElementById("activeLayerName").textContent=
+      geoFiles.find(g=>g.file===editLayerFile)?.label||editLayerFile;
+
+    document.getElementById("fillColor").value=meta.style.fillColor;
+    document.getElementById("fillOpacity").value=meta.style.fillOpacity;
+    document.getElementById("strokeWeight").value=meta.style.strokeWeight;
+    document.getElementById("strokeColor").value=meta.style.strokeColor;
+    document.getElementById("dashedBorder").checked=!!meta.style.dashed;
+
+    const makeOpts=(sel,val)=>{ sel.innerHTML='<option value="">None</option>';
+      meta.props.forEach(p=>sel.insertAdjacentHTML("beforeend",`<option value="${p}">${p}</option>`));
+      sel.value=val||""; };
+    makeOpts(document.getElementById("colorBy"), meta.colorBy);
+    makeOpts(document.getElementById("labelField"), meta.labelField);
+  }
+
+  /* ---------- GLOBAL CONTROL EVENTS ---------- */
+  function attachGlobalControlEvents(){
+    const m=()=>layersMeta[editLayerFile]||null;
+
+    document.getElementById("fillColor").addEventListener("input",e=>{
+      if(!m())return; m().style.fillColor=e.target.value; m().colorBy=""; document.getElementById("colorBy").value="";
+      applyStyle();
+    });
+    document.getElementById("fillOpacity").addEventListener("input",e=>{ if(!m())return; m().style.fillOpacity=parseFloat(e.target.value); applyStyle();});
+    document.getElementById("strokeWeight").addEventListener("input",e=>{ if(!m())return; m().style.strokeWeight=parseInt(e.target.value); applyStyle();});
+    document.getElementById("strokeColor").addEventListener("input",e=>{ if(!m())return; m().style.strokeColor=e.target.value; applyStyle();});
+    document.getElementById("dashedBorder").addEventListener("change",e=>{ if(!m())return; m().style.dashed=e.target.checked; applyStyle();});
+
+    document.getElementById("colorBy").addEventListener("change",e=>{
+      if(!m())return; m().colorBy=e.target.value; if(e.target.value) buildAttrColourMap(editLayerFile); applyStyle();
+    });
+
+    document.getElementById("labelField").addEventListener("change",e=>{
+      if(!m())return; m().labelField=e.target.value; refreshLabels(editLayerFile);
+    });
+
+    document.getElementById("btnExport").addEventListener("click",()=>{
+      html2canvas(document.getElementById("map")).then(c=>{
+        const a=document.createElement("a"); a.download="map.png"; a.href=c.toDataURL("image/png"); a.click();
+      });
+    });
+  }
+
+  /* ---------- LAYER LOAD / UNLOAD ---------- */
+  function loadLayer(file){
+    if(loadedLayers[file]){applyStyle(); refreshLabels(file); return;}
+    fetch(file)
+      .then(r=>{if(!r.ok) throw new Error(r.statusText); return r.json();})
+      .then(json=>{
+        const features=dataLayer.addGeoJson(json);
+        features.forEach(f=>f.setProperty("__src",file));
+        loadedLayers[file]={geojson:json,features};
+
+        if(!layersMeta[file]){
+          const def={fillColor:"#ff0000",fillOpacity:0.5,strokeWeight:2,strokeColor:"#000000",dashed:false};
+          layersMeta[file]={style:def,colorBy:"",attrColourMap:{},props:Object.keys(json.features[0]?.properties||{}),
+                            labelField:"",labelOverlay:null};
+        }
+        if(editLayerFile===file) loadControlsForLayer();
+
+        fitToVisibleLayers();
+        applyStyle();
+        refreshLabels(file);
+      })
+      .catch(err=>alert(`Error loading ${file}\n${err}`));
+  }
+
+  function unloadLayer(file){
+    if(!loadedLayers[file]) return;
+    loadedLayers[file].features.forEach(f=>dataLayer.remove(f));
+    delete loadedLayers[file];
+    clearDashedLines();
+    removeLabelOverlay(file);
+    applyStyle();
+    if(editLayerFile===file){
+      const next=Object.keys(loadedLayers)[0]||null; setActiveLayer(next);
+    }
+  }
+
+  /* ---------- STYLE ---------- */
+  function applyStyle(){
+    dataLayer.setStyle(f=>{
+      const file=f.getProperty("__src"); const meta=layersMeta[file]; if(!meta) return null;
+      let fill=meta.style.fillColor;
+      if(meta.colorBy){ const v=f.getProperty(meta.colorBy); fill=meta.attrColourMap[v]||fill; }
+      return {fillColor:fill, fillOpacity:meta.style.fillOpacity,
+              strokeColor:meta.style.strokeColor, strokeWeight:meta.style.strokeWeight,
+              strokeOpacity:meta.style.dashed||meta.colorBy?0:1};
+    });
+    applyDashedOutlines();
+  }
+
+  /* ---------- DASHED OUTLINES ---------- */
+  function applyDashedOutlines(){
+    clearDashedLines();
+    Object.entries(loadedLayers).forEach(([file,{geojson}])=>{
+      const meta=layersMeta[file]; if(!meta.style.dashed) return;
+      geojson.features.forEach(feat=>{
+        traverseGeom(new google.maps.Data.Feature(feat).getGeometry(),path=>{
+          dashedLines.push(new google.maps.Polyline({
+            path,map,strokeOpacity:0,strokeWeight:0,
+            icons:[{icon:{path:"M 0,-1 0,1",strokeOpacity:1,strokeColor:meta.style.strokeColor,
+                          strokeWeight:meta.style.strokeWeight,scale:3},offset:"0",repeat:"10px"}]
+          }));
+        },null);
+      });
+    });
+  }
+  function clearDashedLines(){dashedLines.forEach(p=>p.setMap(null)); dashedLines=[];}
+
+  /* ---------- LABEL OVERLAY (canvas) ---------- */
+  class LabelOverlay extends google.maps.OverlayView{
+    constructor(points){ super(); this.points=points; this.canvas=null; this.ctx=null; }
+    onAdd(){
+      this.canvas=document.createElement("canvas");
+      this.canvas.style.position="absolute";
+      this.getPanes().overlayLayer.appendChild(this.canvas);
+      this.ctx=this.canvas.getContext("2d");
+    }
+    draw(){
+      const proj=this.getProjection(), div=this.getMap().getDiv();
+      const w=div.offsetWidth, h=div.offsetHeight;
+      if(this.canvas.width!==w||this.canvas.height!==h){ this.canvas.width=w; this.canvas.height=h; }
+      const ctx=this.ctx; ctx.clearRect(0,0,w,h);
+      ctx.font="bold 12px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillStyle="#000";
+      this.points.forEach(p=>{
+        const px=proj.fromLatLngToDivPixel(p.latLng);
+        if(px){ ctx.fillText(p.text, px.x, px.y); }
+      });
+    }
+    onRemove(){ if(this.canvas) this.canvas.remove(); this.canvas=null; }
+  }
+
+  function refreshLabels(file){
+    removeLabelOverlay(file);
+    const meta=layersMeta[file]; if(!meta||!meta.labelField) return;
+
+    const pts=[];
+    loadedLayers[file].features.forEach(f=>{
+      const label=f.getProperty(meta.labelField);
+      if(label===undefined||label===null||label==="") return;
+      const centre=getFeatureCentre(f.getGeometry()); if(!centre) return;
+      pts.push({latLng:centre, text:String(label)});
+    });
+    meta.labelOverlay=new LabelOverlay(pts);
+    meta.labelOverlay.setMap(map);
+  }
+  function removeLabelOverlay(file){
+    const m=layersMeta[file]; if(m&&m.labelOverlay){ m.labelOverlay.setMap(null); m.labelOverlay=null; }
+  }
+
+  /* ---------- COLOUR-BY UTILS ---------- */
+  function buildAttrColourMap(file){
+    const vals=new Set();
+    loadedLayers[file].geojson.features.forEach(f=>vals.add(f.properties[layersMeta[file].colorBy]));
+    const palette=[ "#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b",
+                    "#e377c2","#7f7f7f","#bcbd22","#17becf" ];
+    layersMeta[file].attrColourMap={};
+    Array.from(vals).forEach((v,i)=>layersMeta[file].attrColourMap[v]=palette[i%palette.length]);
+  }
+
+  /* ---------- POP-UPS ---------- */
+  function attachPopupHandler(){
+    dataLayer.addListener("click",e=>{
+      const khasra=e.feature.getProperty("Khasra_No")||"Unknown";
+      const html=`<div style="font-size:14px;"><strong>Khasra&nbsp;No:</strong> ${khasra}</div>`;
+      if(activeInfoWindow) activeInfoWindow.close();
+      activeInfoWindow=new google.maps.InfoWindow({content:html,position:e.latLng});
+      activeInfoWindow.open(map);
+    });
+    google.maps.event.addListener(map,"click",()=>{ if(activeInfoWindow){activeInfoWindow.close();activeInfoWindow=null;} });
+  }
+
+  /* ---------- UTILS ---------- */
+  function filterLayerList(q){
+    q=q.trim().toLowerCase();
+    document.querySelectorAll("#layerList .layer-item").forEach(div=>{
+      const txt=div.querySelector("label").textContent.toLowerCase();
+      div.style.display=txt.includes(q)?"":"none";
+    });
+  }
+  function traverseGeom(geometry,callback,thisArg){
+    if(geometry instanceof google.maps.LatLng) callback.call(thisArg,geometry);
+    else if(geometry instanceof google.maps.Data.Point) callback.call(thisArg,geometry.get());
+    else geometry.getArray().forEach(g=>traverseGeom(g,callback,thisArg));
+  }
+  function getFeatureCentre(geometry){
+    const b=new google.maps.LatLngBounds();
+    traverseGeom(geometry,b.extend,b);
+    return b.isEmpty()?null:b.getCenter();
+  }
+  function fitToVisibleLayers(){
+    const b=new google.maps.LatLngBounds();
+    dataLayer.forEach(f=>traverseGeom(f.getGeometry(),b.extend,b));
+    if(!b.isEmpty()) map.fitBounds(b);
+  }
+  function initialAutoLoad(){
+    const first=geoFiles[0]?.file;
+    if(first){
+      document.querySelector(`#layerList input[value="${first}"]`).checked=true;
+      loadLayer(first);
+      setActiveLayer(first);
+    }
+  }
+  </script>
+
+  <button onclick="logoutUser()" class="btn btn-outline-danger btn-sm"
+          style="position:fixed;bottom:10px;right:10px;z-index:9999">Logout</button>
+</body>
+</html>
