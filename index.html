@@ -4,14 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muhammad Waleed | GIS Portfolio</title>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 <style>
-body {font-family: Arial, sans-serif; margin:0; background:#f4f4f4; color:#333;}
-header {background:#0b6e4f; color:white; padding:30px; text-align:center;}
-section {padding:40px; max-width:1000px; margin:auto; background:white; margin-top:20px; border-radius:10px;}
+body {margin:0; font-family:Arial, sans-serif; background:#f4f6f9; color:#333;}
+header {background:#0b6e4f; color:#fff; padding:40px; text-align:center;}
+section {max-width:1100px; margin:20px auto; background:#fff; padding:30px; border-radius:10px;}
 h2 {color:#0b6e4f;}
-.project {margin-bottom:25px;}
-footer {text-align:center; padding:20px; font-size:14px;}
-.btn {display:inline-block; padding:10px 15px; background:#0b6e4f; color:white; text-decoration:none; border-radius:5px;}
+.project {margin-bottom:20px;}
+#map {height:500px; border-radius:10px;}
+.controls {margin-bottom:10px;}
+button {padding:8px 12px; margin-right:5px; border:none; background:#0b6e4f; color:white; border-radius:5px; cursor:pointer;}
+button:hover {background:#09543c;}
+footer {text-align:center; padding:20px;}
 </style>
 </head>
 <body>
@@ -23,61 +30,118 @@ footer {text-align:center; padding:20px; font-size:14px;}
 </header>
 
 <section>
-<h2>About Me</h2>
-<p>I am a GIS Analyst with 12+ years of experience specializing in cadastral mapping, land information systems, and spatial data analysis. I focus on solving real-world land data problems, improving spatial accuracy, and supporting decision-making through GIS.</p>
+<h2>Professional Summary</h2>
+<p>GIS Analyst with 12+ years of experience in cadastral mapping, land information systems, and spatial analysis. Proven expertise in parcel mapping, georeferencing, and improving land record accuracy through GIS solutions.</p>
 </section>
 
 <section>
-<h2>Skills</h2>
+<h2>Core Skills</h2>
 <ul>
 <li>QGIS, ArcGIS, AutoCAD</li>
-<li>PostgreSQL / PostGIS</li>
-<li>GeoServer, Leaflet</li>
-<li>Parcel Mapping & Boundary Verification</li>
+<li>PostGIS, Spatial Databases</li>
+<li>Cadastral Mapping & Parcel Digitization</li>
 <li>Spatial Analysis & Data Cleaning</li>
+<li>GeoServer, Leaflet Web GIS</li>
 </ul>
 </section>
 
 <section>
-<h2>Projects</h2>
-
+<h2>Key Projects</h2>
 <div class="project">
-<h3>Cadastral Mapping & Digitization</h3>
-<p>Digitized village cadastral maps and built GIS database for land records.</p>
+<h3>Cadastral Mapping Project</h3>
+<p>Digitized thousands of land parcels with topology correction and improved spatial accuracy.</p>
 </div>
-
 <div class="project">
 <h3>Land Parcel Verification</h3>
 <p>Validated parcel boundaries using satellite imagery and survey data.</p>
 </div>
-
 <div class="project">
 <h3>Land Information System</h3>
-<p>Developed GIS system for managing land ownership and spatial queries.</p>
+<p>Developed GIS-based system for land record management and spatial queries.</p>
 </div>
-
-<div class="project">
-<h3>Thematic Mapping</h3>
-<p>Created spatial analysis maps for planning and development projects.</p>
-</div>
-
 </section>
 
 <section>
-<h2>Portfolio Samples</h2>
-<p>Add screenshots of your work here (maps, analysis, systems).</p>
+<h2>Interactive GIS Portfolio Map</h2>
+<div class="controls">
+<button onclick="toggleLayer(parcelLayer)">Toggle Parcels</button>
+<button onclick="toggleLayer(boundaryLayer)">Toggle Boundaries</button>
+<button onclick="toggleLayer(pointLayer)">Toggle Points</button>
+</div>
+<div id="map"></div>
 </section>
 
 <section>
 <h2>Contact</h2>
 <p>Email: mwaleedgul@gmail.com</p>
 <p>Phone: +92 333 5370842</p>
-<a href="mailto:mwaleedgul@gmail.com" class="btn">Contact Me</a>
 </section>
 
 <footer>
 <p>© 2026 Muhammad Waleed | GIS Portfolio</p>
 </footer>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+var map = L.map('map').setView([33.6, 73.0], 11);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+// Sample GeoJSON 1 - Parcels
+var parcels = {
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[73.0,33.6],[73.01,33.6],[73.01,33.61],[73.0,33.61],[73.0,33.6]]]},"properties":{"name":"Parcel A"}},
+    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[73.02,33.6],[73.03,33.6],[73.03,33.61],[73.02,33.61],[73.02,33.6]]]},"properties":{"name":"Parcel B"}}
+  ]
+};
+
+// Sample GeoJSON 2 - Boundaries
+var boundaries = {
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[73.0,33.62],[73.05,33.62]]},"properties":{"name":"Boundary Line"}}
+  ]
+};
+
+// Sample GeoJSON 3 - Points
+var points = {
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","geometry":{"type":"Point","coordinates":[73.01,33.63]},"properties":{"name":"Survey Point"}}
+  ]
+};
+
+var parcelLayer = L.geoJSON(parcels, {
+    style: {color: 'green'},
+    onEachFeature: function (feature, layer) {
+        layer.bindPopup(feature.properties.name);
+    }
+}).addTo(map);
+
+var boundaryLayer = L.geoJSON(boundaries, {
+    style: {color: 'red'}
+}).addTo(map);
+
+var pointLayer = L.geoJSON(points, {
+    pointToLayer: function (feature, latlng) {
+        return L.marker(latlng);
+    }
+}).addTo(map);
+
+function toggleLayer(layer) {
+    if (map.hasLayer(layer)) {
+        map.removeLayer(layer);
+    } else {
+        map.addLayer(layer);
+    }
+}
+
+</script>
 
 </body>
 </html>
