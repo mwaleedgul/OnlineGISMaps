@@ -156,46 +156,65 @@ var baseMaps = {
 
 L.control.layers(baseMaps).addTo(map);
 
-// GeoJSON Data
-var parcels = {
-  "type":"FeatureCollection",
-  "features":[
-    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[73.0,33.6],[73.01,33.6],[73.01,33.61],[73.0,33.61],[73.0,33.6]]]},"properties":{"name":"Parcel A"}},
-    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[73.02,33.6],[73.03,33.6],[73.03,33.61],[73.02,33.61],[73.02,33.6]]]},"properties":{"name":"Parcel B"}}
-  ]
-};
+// -------- LOAD EXTERNAL GEOJSON FILES --------
 
-var boundaries = {
-  "type":"FeatureCollection",
-  "features":[
-    {"type":"Feature","geometry":{"type":"LineString","coordinates":[[73.0,33.62],[73.05,33.62]]},"properties":{"name":"Boundary"}}
-  ]
-};
+function loadGeoJSON(url, styleOptions, isPoint=false) {
+  return fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      return L.geoJSON(data, {
+        style: styleOptions,
+        pointToLayer: function(feature, latlng) {
+          if (isPoint) {
+            return L.circleMarker(latlng, {radius:6, color:"#1d4ed8"});
+          }
+        },
+        onEachFeature: function(feature, layer) {
+          if (feature.properties) {
+            let popup = "";
+            for (let key in feature.properties) {
+              popup += `<b>${key}:</b> ${feature.properties[key]}<br>`;
+            }
+            layer.bindPopup(popup);
+          }
+        }
+      });
+    });
+}
 
-var points = {
-  "type":"FeatureCollection",
-  "features":[
-    {"type":"Feature","geometry":{"type":"Point","coordinates":[73.01,33.63]},"properties":{"name":"Survey Point"}}
-  ]
-};
+// -------- LOAD MULTIPLE LAYERS --------
 
-var parcelLayer = L.geoJSON(parcels,{
-  style:{color:"#3b82f6", weight:2, fillOpacity:0.3},
-  onEachFeature:function(f,l){l.bindPopup(f.properties.name)}
-}).addTo(map);
+let layers = {};
 
-var boundaryLayer = L.geoJSON(boundaries,{
-  style:{color:"#60a5fa", weight:3}
-}).addTo(map);
+Promise.all([
+  loadGeoJSON('baga_sheikhan.geojson', {color:"#3b82f6", weight:2, fillOpacity:0.3}),
+  loadGeoJSON('layer2.geojson', {color:"#60a5fa", weight:2}),
+  loadGeoJSON('layer3.geojson', {color:"#2563eb", weight:2}),
+  loadGeoJSON('layer4.geojson', {color:"#1d4ed8", weight:2}),
+  loadGeoJSON('layer5.geojson', {color:"#93c5fd", weight:2})
+]).then(results => {
 
-var pointLayer = L.geoJSON(points,{
-  pointToLayer:function(f,latlng){return L.circleMarker(latlng,{radius:6, color:"#1d4ed8"})}
-}).addTo(map);
+  layers["Baga Sheikhan"] = results[0].addTo(map);
+  layers["Layer 2"] = results[1];
+  layers["Layer 3"] = results[2];
+  layers["Layer 4"] = results[3];
+  layers["Layer 5"] = results[4];
 
-function toggleLayer(layer){
-  if(map.hasLayer(layer)){
+  // Add layer control
+  L.control.layers(baseMaps, layers).addTo(map);
+
+  // Fit map to first layer
+  map.fitBounds(results[0].getBounds());
+});
+
+// -------- TOGGLE FUNCTION (optional buttons) --------
+function toggleLayer(layer) {
+  if (map.hasLayer(layer)) {
     map.removeLayer(layer);
   } else {
+    map.addLayer(layer);
+  }
+} else {
     map.addLayer(layer);
   }
 }
