@@ -1,224 +1,685 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Muhammad Waleed | GIS Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muhammad Waleed | GIS Portfolio</title>
 
-<!-- Leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-<style>
-:root{
-  --blue:#2b6cff;
-  --blue-dark:#1e4ed8;
-  --glass:rgba(255,255,255,0.15);
-  --border:rgba(255,255,255,0.25);
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  color:#0f172a;
-  background: linear-gradient(135deg,#0f172a 0%, #1e293b 40%, #0ea5e9 100%);
-}
-header{
-  padding:50px 20px;
-  text-align:center;
-  color:#fff;
-}
-header h1{margin:0;font-size:38px;letter-spacing:0.5px}
-header p{margin:6px 0;color:#e2e8f0}
+  <style>
+    :root{
+      --bg1:#08111f;
+      --bg2:#0f1b33;
+      --bg3:#0b2a4a;
+      --glass: rgba(255,255,255,0.10);
+      --glass-strong: rgba(255,255,255,0.16);
+      --stroke: rgba(255,255,255,0.18);
+      --text:#eaf2ff;
+      --muted:#bfd0ea;
+      --blue:#3b82f6;
+      --blue2:#1d4ed8;
+      --cyan:#38bdf8;
+      --danger:#ff7b7b;
+      --success:#7ef0b0;
+      --shadow: 0 18px 45px rgba(0,0,0,0.35);
+      --radius: 22px;
+    }
 
-.section{
-  max-width:1100px;
-  margin:20px auto;
-  padding:28px;
-  border-radius:18px;
-  backdrop-filter: blur(14px);
-  background: var(--glass);
-  border:1px solid var(--border);
-  box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  color:#e5e7eb;
-}
+    * { box-sizing: border-box; }
 
-h2{margin-top:0;color:#e0f2fe}
-.project{margin-bottom:18px}
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(59,130,246,0.16), transparent 28%),
+        linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 45%, var(--bg3) 100%);
+    }
 
-#map{
-  height:520px;
-  border-radius:14px;
-  overflow:hidden;
-}
+    .hero {
+      padding: 48px 18px 24px;
+      text-align: center;
+    }
 
-.controls{
-  margin-bottom:12px;
-}
-button{
-  padding:10px 14px;
-  margin-right:6px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  background: linear-gradient(135deg,var(--blue),var(--blue-dark));
-  color:white;
-  font-weight:500;
-  box-shadow:0 4px 12px rgba(0,0,0,0.3);
-  transition:0.2s;
-}
-button:hover{transform:translateY(-1px);opacity:0.95}
+    .hero-card {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 34px 24px;
+      border: 1px solid var(--stroke);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
 
-footer{
-  text-align:center;
-  padding:20px;
-  color:#cbd5f5;
-}
-</style>
+    .title {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 48px);
+      letter-spacing: 0.3px;
+      line-height: 1.05;
+      color: #f8fbff;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .contact-line {
+      margin: 12px 0 0;
+      color: #dbe7ff;
+      font-size: 15px;
+      word-break: break-word;
+    }
+
+    .grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 18px 24px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--glass-strong), rgba(255,255,255,0.08));
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .card h2, .card h3 {
+      margin: 0 0 12px;
+      color: #f2f7ff;
+    }
+
+    .card p, .card li {
+      color: #d7e3f7;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(59,130,246,0.14);
+      border: 1px solid rgba(59,130,246,0.28);
+      color: #eaf2ff;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .section-wide {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 18px 24px;
+    }
+
+    .section-wide .card {
+      margin-bottom: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .stat .num {
+      display: block;
+      font-size: 26px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .stat .label {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    #mapShell {
+      position: relative;
+    }
+
+    #map {
+      height: 620px;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .map-topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .map-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      color: white;
+      font-weight: 600;
+      padding: 11px 14px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow: 0 10px 20px rgba(37,99,235,0.25);
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); opacity: 0.96; }
+
+    .btn.secondary {
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.10));
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: none;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #dbe7ff;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .status b { color: #fff; }
+
+    .status .ok { color: var(--success); }
+    .status .bad { color: var(--danger); }
+
+    .project {
+      padding: 16px 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .project:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .project-title {
+      margin: 0 0 6px;
+      color: #ffffff;
+      font-size: 18px;
+    }
+
+    .footer {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 18px 28px;
+      text-align: center;
+      color: #bfd0ea;
+      font-size: 13px;
+    }
+
+    /* Leaflet tweaks for dark/glass design */
+    .leaflet-control-layers,
+    .leaflet-bar {
+      border: 1px solid rgba(255,255,255,0.15) !important;
+      background: rgba(10,18,34,0.82) !important;
+      backdrop-filter: blur(10px);
+      color: #fff !important;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28) !important;
+    }
+
+    .leaflet-control-layers label {
+      color: #fff !important;
+    }
+
+    .leaflet-control-layers-expanded {
+      padding: 10px 12px !important;
+    }
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: rgba(11,17,31,0.96) !important;
+      color: #fff !important;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.30);
+    }
+
+    .leaflet-popup-content {
+      margin: 12px 14px !important;
+      color: #eef4ff;
+      line-height: 1.5;
+    }
+
+    .leaflet-popup-content b {
+      color: #9fd0ff;
+    }
+
+    @media (max-width: 960px) {
+      .grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #map { height: 520px; }
+    }
+
+    @media (max-width: 560px) {
+      .stats { grid-template-columns: 1fr; }
+      .hero-card, .card { padding: 20px; }
+      #map { height: 460px; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>Muhammad Waleed</h1>
-  <p>GIS Analyst | Cadastral Mapping Specialist</p>
-  <p>📞 +92 333 5370842 | 📧 mwaleedgul@gmail.com</p>
-</header>
+  <header class="hero">
+    <div class="hero-card">
+      <h1 class="title">Muhammad Waleed</h1>
+      <p class="subtitle">GIS Analyst | Cadastral Mapping Specialist</p>
+      <p class="contact-line">📞 +92 333 5370842 · 📧 mwaleedgul@gmail.com</p>
 
-<div class="section">
-  <h2>Professional Summary</h2>
-  <p>GIS Analyst with 12+ years of experience in cadastral mapping, land information systems, and spatial analysis. Specialized in parcel digitization, topology correction, and land record accuracy improvement.</p>
-</div>
+      <div class="stats">
+        <div class="stat">
+          <span class="num">12+</span>
+          <span class="label">Years of GIS experience</span>
+        </div>
+        <div class="stat">
+          <span class="num">6</span>
+          <span class="label">GeoJSON layers ready to load</span>
+        </div>
+        <div class="stat">
+          <span class="num">2</span>
+          <span class="label">Base maps: street & satellite</span>
+        </div>
+        <div class="stat">
+          <span class="num">100%</span>
+          <span class="label">Relative-path friendly for GitHub Pages</span>
+        </div>
+      </div>
+    </div>
+  </header>
 
-<div class="section">
-  <h2>Core Skills</h2>
-  <ul>
-    <li>QGIS, ArcGIS, AutoCAD</li>
-    <li>PostGIS & Spatial Databases</li>
-    <li>Cadastral Mapping & Parcel Management</li>
-    <li>GeoServer & Web GIS (Leaflet)</li>
-  </ul>
-</div>
+  <main class="grid">
+    <section class="card">
+      <h2>Professional Summary</h2>
+      <p>
+        GIS Analyst with extensive experience in cadastral mapping, land information systems, spatial data processing,
+        georeferencing, parcel digitization, and topology correction. Focused on building reliable GIS outputs for
+        land records, planning, and decision support.
+      </p>
 
-<div class="section">
-  <h2>Key Projects</h2>
-  <div class="project">
-    <strong>Cadastral Mapping</strong>
-    <p>Digitized and validated thousands of land parcels with topology correction and improved spatial accuracy.</p>
+      <h3>Core Skills</h3>
+      <div class="pill-row">
+        <span class="pill">QGIS</span>
+        <span class="pill">ArcGIS</span>
+        <span class="pill">AutoCAD</span>
+        <span class="pill">PostGIS</span>
+        <span class="pill">GeoServer</span>
+        <span class="pill">Leaflet</span>
+        <span class="pill">Cadastral Mapping</span>
+        <span class="pill">Parcel Verification</span>
+      </div>
+
+      <h3 style="margin-top:18px;">Selected Work</h3>
+
+      <div class="project">
+        <p class="project-title">Cadastral Mapping</p>
+        <p>Digitized and validated land parcels with topology correction and improved spatial accuracy.</p>
+      </div>
+
+      <div class="project">
+        <p class="project-title">Parcel Boundary Verification</p>
+        <p>Performed spatial validation using imagery and survey datasets to resolve land discrepancies.</p>
+      </div>
+
+      <div class="project">
+        <p class="project-title">GIS-Based Land Information System</p>
+        <p>Developed spatial workflows for land record management and map-based querying.</p>
+      </div>
+    </section>
+
+    <section class="card" id="mapShell">
+      <div class="map-topbar">
+        <div>
+          <h2 style="margin-bottom:4px;">Interactive GIS Map</h2>
+          <div style="color:var(--muted); font-size:14px;">Street and satellite basemaps with multiple GeoJSON overlays.</div>
+        </div>
+
+        <div class="map-actions">
+          <button class="btn" id="btnFitAll" type="button">Fit All Layers</button>
+          <button class="btn secondary" id="btnStreet" type="button">Street</button>
+          <button class="btn secondary" id="btnSatellite" type="button">Satellite</button>
+        </div>
+      </div>
+
+      <div id="map"></div>
+
+      <div class="status" id="statusBox">
+        <b>Status:</b> Initializing map...
+      </div>
+    </section>
+  </main>
+
+  <section class="section-wide">
+    <div class="card">
+      <h2>Portfolio Notes</h2>
+      <p>
+        To load your real GeoJSON files, keep them in the same folder as <b>index.html</b> or inside a subfolder and
+        update the file paths below. Add or remove layers by editing the <b>GEOJSON_LAYERS</b> list in the script.
+      </p>
+      <p>
+        Example structure:
+        <br>
+        <code style="color:#dbe7ff;">index.html</code>,
+        <code style="color:#dbe7ff;">baga_sheikhan.geojson</code>,
+        <code style="color:#dbe7ff;">layer2.geojson</code>,
+        <code style="color:#dbe7ff;">layer3.geojson</code>, etc.
+      </p>
+    </div>
+  </section>
+
+  <div class="footer">
+    © 2026 Muhammad Waleed | GIS Portfolio
   </div>
-  <div class="project">
-    <strong>Parcel Boundary Verification</strong>
-    <p>Performed spatial validation using imagery and survey datasets to resolve land discrepancies.</p>
-  </div>
-  <div class="project">
-    <strong>Land Information System</strong>
-    <p>Developed GIS-based system for spatial queries and land record management.</p>
-  </div>
-</div>
 
-<div class="section">
-  <h2>Interactive GIS Map</h2>
-  <div class="controls">
-    <button onclick="toggleLayer(parcelLayer)">Parcels</button>
-    <button onclick="toggleLayer(boundaryLayer)">Boundaries</button>
-    <button onclick="toggleLayer(pointLayer)">Points</button>
-  </div>
-  <div id="map"></div>
-</div>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<div class="section">
-  <h2>Contact</h2>
-  <p>Email: mwaleedgul@gmail.com</p>
-  <p>Phone: +92 333 5370842</p>
-</div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const statusBox = document.getElementById("statusBox");
 
-<footer>
-  © 2026 Muhammad Waleed | GIS Portfolio
-</footer>
+      function setStatus(html) {
+        statusBox.innerHTML = html;
+      }
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
 
-<script>
-// Base maps
-var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  attribution: 'Tiles © Esri'
-});
+      // ---------- BASE MAPS ----------
+      const streetLayer = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          maxZoom: 22,
+          attribution: '&copy; OpenStreetMap contributors'
+        }
+      );
 
-var map = L.map('map', {
-  center: [33.6,73.0],
-  zoom: 11,
-  layers:[street]
-});
+      const satelliteLayer = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          maxZoom: 22,
+          attribution: "Tiles &copy; Esri"
+        }
+      );
 
-var baseMaps = {
-  "Street": street,
-  "Satellite": satellite
-};
+      const map = L.map("map", {
+        center: [33.65, 73.05],
+        zoom: 11,
+        layers: [streetLayer],
+        zoomControl: true
+      });
 
-L.control.layers(baseMaps).addTo(map);
+      const baseMaps = {
+        "Street": streetLayer,
+        "Satellite": satelliteLayer
+      };
 
-// -------- LOAD EXTERNAL GEOJSON FILES --------
+      const overlayMaps = {};
+      const loadedLayerBounds = [];
 
-function loadGeoJSON(url, styleOptions, isPoint=false) {
-  return fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      return L.geoJSON(data, {
-        style: styleOptions,
-        pointToLayer: function(feature, latlng) {
-          if (isPoint) {
-            return L.circleMarker(latlng, {radius:6, color:"#1d4ed8"});
-          }
+      const layerControl = L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+      }).addTo(map);
+
+      // ---------- GEOJSON MANIFEST ----------
+      // Add your files here. Keep paths relative to index.html on GitHub Pages.
+      const GEOJSON_LAYERS = [
+        {
+          name: "Baga Sheikhan",
+          file: "./baga_sheikhan.geojson",
+          color: "#3b82f6",
+          fillColor: "#60a5fa",
+          weight: 2,
+          fillOpacity: 0.28
         },
-        onEachFeature: function(feature, layer) {
-          if (feature.properties) {
-            let popup = "";
-            for (let key in feature.properties) {
-              popup += `<b>${key}:</b> ${feature.properties[key]}<br>`;
+        {
+          name: "Layer 2",
+          file: "./layer2.geojson",
+          color: "#2563eb",
+          fillColor: "#3b82f6",
+          weight: 2,
+          fillOpacity: 0.22
+        },
+        {
+          name: "Layer 3",
+          file: "./layer3.geojson",
+          color: "#1d4ed8",
+          fillColor: "#2563eb",
+          weight: 2,
+          fillOpacity: 0.22
+        },
+        {
+          name: "Layer 4",
+          file: "./layer4.geojson",
+          color: "#60a5fa",
+          fillColor: "#93c5fd",
+          weight: 2,
+          fillOpacity: 0.22
+        },
+        {
+          name: "Layer 5",
+          file: "./layer5.geojson",
+          color: "#0ea5e9",
+          fillColor: "#38bdf8",
+          weight: 2,
+          fillOpacity: 0.22
+        },
+        {
+          name: "Layer 6",
+          file: "./layer6.geojson",
+          color: "#1e40af",
+          fillColor: "#3b82f6",
+          weight: 2,
+          fillOpacity: 0.22
+        }
+      ];
+
+      function styleFromDef(def) {
+        return {
+          color: def.color || "#3b82f6",
+          weight: def.weight ?? 2,
+          opacity: 1,
+          fillColor: def.fillColor || def.color || "#60a5fa",
+          fillOpacity: def.fillOpacity ?? 0.25
+        };
+      }
+
+      function popupContentFromProperties(properties) {
+        if (!properties || typeof properties !== "object") {
+          return "<i>No attributes available</i>";
+        }
+
+        const rows = Object.entries(properties).map(([key, value]) => {
+          const safeKey = escapeHtml(key);
+          const safeValue = escapeHtml(value);
+          return `<div><b>${safeKey}:</b> ${safeValue}</div>`;
+        });
+
+        return rows.length ? rows.join("") : "<i>No attributes available</i>";
+      }
+
+      async function loadGeoJSONLayer(def) {
+        const response = await fetch(def.file, { cache: "no-store" });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} while loading ${def.file}`);
+        }
+
+        const data = await response.json();
+
+        const layer = L.geoJSON(data, {
+          style: function (feature) {
+            const geometryType = feature && feature.geometry && feature.geometry.type;
+            if (geometryType === "Point" || geometryType === "MultiPoint") {
+              return undefined;
             }
-            layer.bindPopup(popup);
+            return styleFromDef(def);
+          },
+          pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, {
+              radius: 6,
+              color: def.color || "#3b82f6",
+              weight: 2,
+              fillColor: def.fillColor || def.color || "#60a5fa",
+              fillOpacity: 0.9
+            });
+          },
+          onEachFeature: function (feature, layerItem) {
+            if (feature && feature.properties) {
+              layerItem.bindPopup(popupContentFromProperties(feature.properties), {
+                maxWidth: 320
+              });
+            }
           }
+        });
+
+        return { layer, data };
+      }
+
+      async function initLayers() {
+        setStatus("<b>Status:</b> Loading GeoJSON layers...");
+
+        const results = await Promise.allSettled(
+          GEOJSON_LAYERS.map(async (def) => {
+            const result = await loadGeoJSONLayer(def);
+            return { def, ...result };
+          })
+        );
+
+        let successCount = 0;
+        const failed = [];
+
+        results.forEach((result, index) => {
+          const def = GEOJSON_LAYERS[index];
+
+          if (result.status === "fulfilled") {
+            const { layer } = result.value;
+            overlayMaps[def.name] = layer;
+            layer.addTo(map);
+            layerControl.addOverlay(layer, def.name);
+
+            try {
+              const bounds = layer.getBounds();
+              if (bounds && bounds.isValid && bounds.isValid()) {
+                loadedLayerBounds.push(bounds);
+              }
+            } catch (e) {
+              // ignore layers without bounds
+            }
+
+            successCount += 1;
+          } else {
+            failed.push(`${def.file}: ${result.reason.message}`);
+          }
+        });
+
+        if (successCount > 0) {
+          try {
+            const firstBounds = loadedLayerBounds[0];
+            if (firstBounds && firstBounds.isValid && firstBounds.isValid()) {
+              map.fitBounds(firstBounds.pad(0.12));
+            }
+          } catch (e) {
+            // do nothing
+          }
+
+          setStatus(
+            `<b>Status:</b> <span class="ok">${successCount} layer(s) loaded successfully.</span>` +
+            (failed.length
+              ? `<br><br><b>Missing / failed:</b><br><span class="bad">${failed.map(escapeHtml).join("<br>")}</span>`
+              : "")
+          );
+        } else {
+          setStatus(
+            `<b>Status:</b> <span class="bad">No GeoJSON layers loaded.</span><br><br>` +
+            `Check that the files exist beside index.html, the names match exactly, and the GeoJSON is valid.`
+          );
+        }
+      }
+
+      // ---------- MAP BUTTONS ----------
+      document.getElementById("btnFitAll").addEventListener("click", () => {
+        if (loadedLayerBounds.length === 0) return;
+        const group = L.latLngBounds(loadedLayerBounds);
+        if (group.isValid()) {
+          map.fitBounds(group.pad(0.12));
         }
       });
+
+      document.getElementById("btnStreet").addEventListener("click", () => {
+        if (map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
+        if (!map.hasLayer(streetLayer)) streetLayer.addTo(map);
+      });
+
+      document.getElementById("btnSatellite").addEventListener("click", () => {
+        if (map.hasLayer(streetLayer)) map.removeLayer(streetLayer);
+        if (!map.hasLayer(satelliteLayer)) satelliteLayer.addTo(map);
+      });
+
+      // ---------- SAFETY NET ----------
+      window.addEventListener("error", (event) => {
+        setStatus(
+          `<b>Status:</b> <span class="bad">JavaScript error detected.</span><br>` +
+          `<span class="bad">${escapeHtml(event.message || "Unknown error")}</span>`
+        );
+      });
+
+      // Start loading layers after the base map is ready.
+      initLayers().catch((err) => {
+        setStatus(
+          `<b>Status:</b> <span class="bad">Failed to load layers.</span><br>` +
+          `<span class="bad">${escapeHtml(err.message)}</span>`
+        );
+      });
     });
-}
-
-// -------- LOAD MULTIPLE LAYERS --------
-
-let layers = {};
-
-Promise.all([
-  loadGeoJSON('baga_sheikhan.geojson', {color:"#3b82f6", weight:2, fillOpacity:0.3}),
-  loadGeoJSON('layer2.geojson', {color:"#60a5fa", weight:2}),
-  loadGeoJSON('layer3.geojson', {color:"#2563eb", weight:2}),
-  loadGeoJSON('layer4.geojson', {color:"#1d4ed8", weight:2}),
-  loadGeoJSON('layer5.geojson', {color:"#93c5fd", weight:2})
-]).then(results => {
-
-  layers["Baga Sheikhan"] = results[0].addTo(map);
-  layers["Layer 2"] = results[1];
-  layers["Layer 3"] = results[2];
-  layers["Layer 4"] = results[3];
-  layers["Layer 5"] = results[4];
-
-  // Add layer control
-  L.control.layers(baseMaps, layers).addTo(map);
-
-  // Fit map to first layer
-  map.fitBounds(results[0].getBounds());
-});
-
-// -------- TOGGLE FUNCTION (optional buttons) --------
-function toggleLayer(layer) {
-  if (map.hasLayer(layer)) {
-    map.removeLayer(layer);
-  } else {
-    map.addLayer(layer);
-  }
-} else {
-    map.addLayer(layer);
-  }
-}
-</script>
-
+  </script>
 </body>
 </html>
