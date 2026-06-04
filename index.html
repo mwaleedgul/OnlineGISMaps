@@ -3,448 +3,627 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muhammad Waleed | Geospatial & Cadastral Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Muhammad Waleed | GIS Analyst & Cadastral Expert</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #38bdf8;
+            --bg-color: #0b1120;
+            --section-bg: #111827;
+            --card-bg: #1f2937;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent: #0ea5e9;
+            --accent-hover: #38bdf8;
+            --border-color: #374151;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            /* Anti-theft: text selection disabled */
+            font-family: 'Poppins', sans-serif;
             user-select: none; 
             -webkit-user-select: none;
-        }
-
-        /* Header Styling */
-        header {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(180deg, #020617 0%, #0f172a 100%);
-            border-bottom: 1px solid #334155;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 0.5rem;
-        }
-
-        header h1 span {
-            color: var(--accent);
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
             line-height: 1.6;
         }
 
-        /* Portfolio Grid */
-        .portfolio-container {
-            max-width: 1400px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 2rem;
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(11, 17, 32, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav h2 { color: #fff; font-weight: 700; letter-spacing: 1px; }
+        nav h2 span { color: var(--accent); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 5% 80px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-color) 0%, var(--section-bg) 100%);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+        .contact-pills {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .pill {
+            background: var(--card-bg);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pill i { color: var(--accent); }
+
+        /* Section Containers */
+        .section-container { padding: 80px 5%; }
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
         }
 
-        /* Card Styling */
+        /* Resume Grid */
+        .resume-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .resume-box {
+            background: var(--section-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .resume-box h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .timeline-item {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--border-color);
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 5px;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+        .timeline-item h4 { font-size: 1.1rem; color: #fff; }
+        .timeline-item .date { font-size: 0.85rem; color: var(--accent); font-weight: 600; margin: 0.3rem 0; }
+        .timeline-item h5 { font-size: 0.95rem; color: #d1d5db; margin-bottom: 0.5rem; font-weight: 500;}
+        .timeline-item ul { list-style-type: disc; margin-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem; }
+        .timeline-item ul li { margin-bottom: 0.4rem; }
+
+        /* Skills Tags */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .skill-tag {
+            background: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+        .skill-tag:hover { border-color: var(--accent); }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
         .map-card {
             background-color: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
             aspect-ratio: 4/3;
-            cursor: pointer; /* Pointer to show it's clickable */
+            cursor: pointer;
         }
-
-        .map-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Image and Anti-theft styling */
+        .map-card:hover { transform: translateY(-5px); }
         .map-card img {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
-            /* Anti-theft: pointer events disabled on actual image */
             pointer-events: none; 
             -webkit-user-drag: none;
         }
-
-        .map-card:hover img {
-            transform: scale(1.05);
-        }
-
-        /* Invisible layer that stops right click from hitting the image */
+        .map-card:hover img { transform: scale(1.08); }
         .anti-theft-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-            background: transparent;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5; background: transparent;
         }
-
-        /* Hover Details */
         .card-details {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            position: absolute; bottom: 0; left: 0; width: 100%;
             padding: 2rem 1.5rem 1.5rem;
-            background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 60%, transparent 100%);
-            transform: translateY(20px);
+            background: linear-gradient(to top, rgba(17, 24, 39, 0.95) 0%, rgba(17, 24, 39, 0.6) 60%, transparent 100%);
+            transform: translateY(10px);
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 10;
-            pointer-events: none; /* Let clicks pass through */
+            pointer-events: none;
         }
+        .map-card:hover .card-details { transform: translateY(0); opacity: 1; }
+        .card-details h3 { font-size: 1rem; color: #fff; margin-bottom: 0.3rem; font-family: 'Inter', sans-serif;}
+        .card-details p { font-size: 0.8rem; color: var(--text-muted); }
 
-        .map-card:hover .card-details {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .card-details h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.4rem;
-            font-weight: 600;
-            color: #fff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            text-transform: uppercase;
-        }
-
-        .card-details p {
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            line-height: 1.4;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-
-        /* LIGHTBOX (Zoom Image) STYLING */
+        /* Lightbox */
         #lightbox {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(2, 6, 23, 0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(5px);
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(3, 7, 18, 0.95); z-index: 1000;
+            justify-content: center; align-items: center; opacity: 0;
+            transition: opacity 0.3s ease; backdrop-filter: blur(8px);
         }
-
-        .lightbox-wrapper {
-            position: relative;
-            max-width: 90%;
-            max-height: 90%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .lightbox-wrapper img {
-            max-width: 100%;
-            max-height: 90vh;
-            border-radius: 8px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            pointer-events: none; /* Anti-theft in zoom mode */
-            -webkit-user-drag: none;
-        }
-
-        /* Anti-theft layer for the zoomed image */
-        .lightbox-anti-theft {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1001;
-            background: transparent;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 1002;
-            transition: color 0.2s ease;
-        }
-
-        .close-btn:hover {
-            color: var(--accent);
-        }
+        .lightbox-wrapper { position: relative; max-width: 90%; max-height: 90%; display: flex; justify-content: center; align-items: center; }
+        .lightbox-wrapper img { max-width: 100%; max-height: 90vh; border-radius: 8px; pointer-events: none; -webkit-user-drag: none; }
+        .lightbox-anti-theft { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1001; background: transparent; }
+        .close-btn { position: absolute; top: -40px; right: 0; color: white; font-size: 35px; cursor: pointer; z-index: 1002; }
+        .close-btn:hover { color: var(--accent); }
 
         /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-muted);
-            border-top: 1px solid #334155;
-            margin-top: 4rem;
-        }
+        footer { text-align: center; padding: 2rem; background: var(--section-bg); color: var(--text-muted); border-top: 1px solid var(--border-color); }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .portfolio-container {
-                grid-template-columns: 1fr;
-            }
-            .close-btn {
-                top: -30px;
-                right: 10px;
-            }
+            .resume-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
-    <header>
-        <h1>Muhammad <span>Waleed</span></h1>
-        <p>GIS Analyst & Freelancer | Specializing in Cadastral Mapping, Spatial Data Processing, and Professional Cartography.</p>
-    </header>
+    <!-- Navbar -->
+    <nav>
+        <h2>M. <span>Waleed</span></h2>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#resume">Resume</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+        </ul>
+    </nav>
 
-    <main class="portfolio-container">
+    <!-- Hero Section (Summary) -->
+    <section id="about" class="hero">
+        <h1>MUHAMMAD WALEED</h1>
+        <h3 style="color: var(--accent); margin-bottom: 1rem; font-weight: 500;">GIS ANALYST[cite: 1]</h3>
+        <p>I am a highly skilled GIS Analyst with extensive experience in database management, web development, and office administration.[cite: 1] With a background in engineering services and a strong grasp of various software applications, I excel in maintaining customer relations and ensuring smooth operations.[cite: 1] My technical expertise and dedication to problem-solving have allowed me to contribute effectively to my teams, achieving key targets and enhancing productivity.[cite: 1]</p>
         
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_1.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Territorial Mapping">
-            <div class="card-details">
-                <h3>TERRITORIAL MAPPING OF RAWALPINDI DIVISION</h3>
-                <p>Detailed Delineation of Rawalpindi's Administrative Zones.</p>
-            </div>
-        </article>
+        <!-- Seamless injection of dynamic professional approach -->
+        <p style="margin-top: 1rem; color: #cbd5e1; font-size: 1rem;">
+            I specialize in advanced cadastral mapping and revenue record digitization, leveraging platforms such as ArcGIS Pro, ArcMap, and Google Earth Engine. Furthermore, for intricate spatial frameworks involving historical Masavi and Latha sheets, I utilize Python alongside OpenCV and NumPy to automate and refine Khasra boundary delineation. Operating exclusively on structured freelance terms (70% advance, 30% upon completion), I ensure dedicated focus, precision, and high-quality deliverables for all geospatial projects.
+        </p>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_2.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Hypsometric Tinting">
-            <div class="card-details">
-                <h3>HYPSOMETRIC TINTING & RELIEF VISUALIZATION</h3>
-                <p>Utilizing SRTM Elevation data and high-resolution satellite imagery to visualize provincial terrain morphology.</p>
-            </div>
-        </article>
+        <div class="contact-pills">
+            <div class="pill"><i class="fas fa-phone"></i> +92 333 5370842[cite: 1]</div>
+            <div class="pill"><i class="fas fa-envelope"></i> mwaleedgul@gmail.com[cite: 1]</div>
+            <div class="pill"><i class="fas fa-map-marker-alt"></i> Dhoke Chaudhrian Rawalpindi, Pakistan[cite: 1]</div>
+            <div class="pill"><i class="fas fa-globe"></i> https://mwaleedgul.github.io/OnlineGISMaps/[cite: 1]</div>
+        </div>
+    </section>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_3.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Spatial Terrain">
-            <div class="card-details">
-                <h3>Spatial Terrain & Revenue Framework</h3>
-                <p>Integrated Land Parcel & Terrain Visualization</p>
-            </div>
-        </article>
+    <!-- Resume Section -->
+    <section id="resume" class="section-container" style="background: var(--bg-color);">
+        <h2 class="section-title">Professional Resume</h2>
+        <div class="resume-grid">
+            
+            <!-- Experience -->
+            <div class="resume-box">
+                <h3><i class="fas fa-briefcase"></i> Experience</h3>
+                
+                <div class="timeline-item">
+                    <h4>GIS Analyst[cite: 1]</h4>
+                    <div class="date">04/2014 - Continue[cite: 1]</div>
+                    <h5>BAHRIA TOWN (PVT) LTD / Al-Basit Group of Companies, Pakistan[cite: 1]</h5>
+                    <ul>
+                        <li>Worked on ArcGIS for geographic information system tasks[cite: 1]</li>
+                        <li>Engaged in digitization of land and engineering drawings[cite: 1]</li>
+                        <li>Handled networking maintenance and IT troubleshooting[cite: 1]</li>
+                        <li>Maintained daily correspondence with customers[cite: 1]</li>
+                        <li>Utilized MS Office, Inpage Urdu, Corel Draw, Adobe Photoshop, and AutoCAD 2D & 3D for various applications[cite: 1]</li>
+                        <li>Managed website maintenance including WordPress & custom sites[cite: 1]</li>
+                    </ul>
+                </div>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_4.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Terrain Morphology">
-            <div class="card-details">
-                <h3>TERRAIN MORPHOLOGY</h3>
-                <p>Visualizing the intricate relief of the Lesser Himalayas through multi-stage geospatial rendering.</p>
-            </div>
-        </article>
+                <div class="timeline-item">
+                    <h4>Sales Representative[cite: 1]</h4>
+                    <div class="date">11/2011 - 02/2014[cite: 1]</div>
+                    <h5>RABIH Trading LLC - Dubai UAE[cite: 1]</h5>
+                    <ul>
+                        <li>Handled web design, development, and maintenance[cite: 1]</li>
+                        <li>Maintained customers and suppliers' records in database software[cite: 1]</li>
+                        <li>Managed accounts using Quickbooks software[cite: 1]</li>
+                        <li>Developed engineering drawings in AutoCAD 2D & 3D[cite: 1]</li>
+                        <li>Performed networking maintenance and IT troubleshooting[cite: 1]</li>
+                    </ul>
+                </div>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_5.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Mouza Level">
-            <div class="card-details">
-                <h3>Mouza-Level Analysis</h3>
-                <p>Strategic Boundary Mapping: Selected Sectors of Rawalpindi.</p>
+                <div class="timeline-item">
+                    <h4>Executive, Admin & Services[cite: 1]</h4>
+                    <div class="date">08/2009 - 11/2011[cite: 1]</div>
+                    <h5>BAHA Engineering Enterprises (Pvt) Ltd, Pakistan[cite: 1]</h5>
+                    <ul>
+                        <li>Maintained accounts of the company in database software[cite: 1]</li>
+                        <li>Maintained company's websites[cite: 1]</li>
+                        <li>Applied MS Office, Inpage Urdu, Corel Draw, Adobe Photoshop, and AutoCAD for various applications[cite: 1]</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>Office Assistant[cite: 1]</h4>
+                    <div class="date">06/2005 - 08/2009[cite: 1]</div>
+                    <h5>ZEE Builders & Engineers, Bahria Town, Pakistan[cite: 1]</h5>
+                    <ul>
+                        <li>Daily data entry in the software[cite: 1]</li>
+                        <li>Maintained records of all members in database software[cite: 1]</li>
+                        <li>Handled daily correspondence with members and processed transfer cases[cite: 1]</li>
+                        <li>Worked in MS Office and Inpage Urdu for various applications[cite: 1]</li>
+                    </ul>
+                </div>
             </div>
-        </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_6.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Accuracy Assessment">
-            <div class="card-details">
-                <h3>ACCURACY ASSESSMENT OF GEOREFERENCED CADASTRAL MAP</h3>
-                <p>Bridging the Gap Between Paper Records and Pixel Precision using Grid-Based Sampling.</p>
+            <!-- Education & Skills -->
+            <div class="resume-box">
+                <h3 style="margin-bottom: 2rem;"><i class="fas fa-graduation-cap"></i> Education</h3>
+                
+                <div class="timeline-item">
+                    <h4>B.A (Bachelor of Arts)[cite: 1]</h4>
+                    <div class="date">01/2015 - 01/2015[cite: 1]</div>
+                    <h5>AIOU (Allama Iqbal Open University), Islamabad, Pakistan[cite: 1]</h5>
+                </div>
+                
+                <div class="timeline-item">
+                    <h4>HSSC (Intermediate of Computer Sciences)[cite: 1]</h4>
+                    <div class="date">01/2000 - 01/2002[cite: 1]</div>
+                    <h5>Federal Board of Islamabad, Pakistan[cite: 1]</h5>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>SSC (Secondary School Certificate)[cite: 1]</h4>
+                    <div class="date">01/1999 - 01/2000[cite: 1]</div>
+                    <h5>Rawalpindi Board, Pakistan[cite: 1]</h5>
+                </div>
+
+                <div class="timeline-item" style="border-left: none;">
+                    <h4>Computer Hardware & Software[cite: 1]</h4>
+                    <div class="date">01/2020 - 03/2020[cite: 1]</div>
+                    <h5>Fuji Foundation Technical Training Center, Gharibabad Pakistan[cite: 1]</h5>
+                </div>
+
+                <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;"><i class="fas fa-code"></i> Technical Skills</h3>
+                <div class="skills-container">
+                    <span class="skill-tag">ArcGIS Pro[cite: 1]</span>
+                    <span class="skill-tag">ArcMap[cite: 1]</span>
+                    <span class="skill-tag">QGIS[cite: 1]</span>
+                    <span class="skill-tag">AutoCad 2D/3D[cite: 1]</span>
+                    <span class="skill-tag">CorelDRAW[cite: 1]</span>
+                    <span class="skill-tag">Adobe Photoshop & Illustrator[cite: 1]</span>
+                    <span class="skill-tag">C/C++[cite: 1]</span>
+                    <span class="skill-tag">PHP[cite: 1]</span>
+                    <span class="skill-tag">HTML/DHTML[cite: 1]</span>
+                    <span class="skill-tag">JavaScript[cite: 1]</span>
+                    <span class="skill-tag">QuickBooks[cite: 1]</span>
+                    <span class="skill-tag">WordPress[cite: 1]</span>
+                    <span class="skill-tag">Windows Server[cite: 1]</span>
+                </div>
             </div>
-        </article>
+            
+        </div>
+    </section>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_7.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Haro River Basin">
-            <div class="card-details">
-                <h3>HARO RIVER BASIN - HYDROLOGICAL VEINS KHANPUR</h3>
-                <p>Tracking the pulse of the region's aquatic infrastructure.</p>
-            </div>
-        </article>
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="section-container">
+        <h2 class="section-title">Geospatial Mapping Portfolio</h2>
+        <div class="portfolio-grid">
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_8.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Thermal Mapping">
-            <div class="card-details">
-                <h3>VOLUMETRIC THERMAL MAPPING - ALTITUDE VS. EMISSION IN AJK</h3>
-                <p>Visualizing microclimates and urban heat distribution through high-resolution spatial extrusion.</p>
-            </div>
-        </article>
+            <!-- 23 Dynamic Maps Grid -->
+            <!-- Map 1 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_1.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 1">
+                <div class="card-details">
+                    <h3>Spatial Analysis of Wind Velocity & Directional Flow Patterns</h3>
+                    <p>Visualizing meteorological flow directions across complex topographies.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_9.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Pothwar Plateau">
-            <div class="card-details">
-                <h3>The Sculpted Terrain of Northern Punjab</h3>
-                <p>The Pothwar Plateau high-resolution relief visualization.</p>
-            </div>
-        </article>
+            <!-- Map 2 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_2.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 2">
+                <div class="card-details">
+                    <h3>The Sculpted Terrain of Northern Punjab</h3>
+                    <p>The Pothwar Plateau high-resolution relief visualization.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_10.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Wind Velocity">
-            <div class="card-details">
-                <h3>Spatial Analysis of Wind Velocity & Flow Patterns</h3>
-                <p>Visualizing meteorological flow directions across complex topographies.</p>
-            </div>
-        </article>
+            <!-- Map 3 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_3.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 3">
+                <div class="card-details">
+                    <h3>Integrated Land Parcel & Terrain Visualization</h3>
+                    <p>Spatial Terrain & Revenue Framework</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_11.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="KPK Drainage">
-            <div class="card-details">
-                <h3>TOPOGRAPHY AND DRAINAGE NETWORK OF KPK</h3>
-                <p>Hypsometric and Strahler Stream Order Classification.</p>
-            </div>
-        </article>
+            <!-- Map 4 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_4.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 4">
+                <div class="card-details">
+                    <h3>TERRAIN MORPHOLOGY</h3>
+                    <p>Visualizing the intricate relief of the Lesser Himalayas through multi-stage geospatial</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_12.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Latha Map">
-            <div class="card-details">
-                <h3>LATHA MAP DIGITAL TRANSFORMATION</h3>
-                <p>Bringing traditional Latha maps into the digital age with vector tracing and geospatial accuracy.</p>
-            </div>
-        </article>
+            <!-- Map 5 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_5.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 5">
+                <div class="card-details">
+                    <h3>Spatial Terrain & Revenue Framework</h3>
+                    <p>Geospatial structure of legacy boundaries.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_13.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Soil Productivity">
-            <div class="card-details">
-                <h3>SPATIO-TEMPORAL SOIL PRODUCTIVITY TRENDS</h3>
-                <p>Evaluating 7-Year Landscape Productivity Dynamics using Cloud-Based Remote Sensing (2017-2024).</p>
-            </div>
-        </article>
+            <!-- Map 6 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_6.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 6">
+                <div class="card-details">
+                    <h3>HYPSOMETRIC TINTING & RELIEF VISUALIZATION.</h3>
+                    <p>Utilizing SRTM Elevation data and high-resolution satellite imagery to visualize provincial terrain morphology.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_14.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Multi-Cadastral">
-            <div class="card-details">
-                <h3>MULTI-CADASTRAL COHESION FRAMEWORK</h3>
-                <p>Advanced spatial digitization and structural land revenue mapping, Rawalpindi Division.</p>
-            </div>
-        </article>
+            <!-- Map 7 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_7.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 7">
+                <div class="card-details">
+                    <h3>Mouza-Level Analysis</h3>
+                    <p>Strategic Boundary Mapping: Selected Sectors of Rawalpindi</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_15.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Mouza Map">
-            <div class="card-details">
-                <h3>DIGITAL CADASTRAL MAP OF MOUZA</h3>
-                <p>Visualizing the cadastral boundaries of Mouza, Tehsil Rawalpindi.</p>
-            </div>
-        </article>
+            <!-- Map 8 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_8.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 8">
+                <div class="card-details">
+                    <h3>ACCURACY ASSESSMENT OF GEOREFERENCED CADASTRAL MAP USING GRID-BASED SAMPLING</h3>
+                    <p>Bridging the Gap Between Paper Records and Pixel Precision.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_16.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Unified Land Record">
-            <div class="card-details">
-                <h3>UNIFIED LAND RECORD & CADASTRAL INDEX</h3>
-                <p>Modernizing Tenure with Geospatial Integrity.</p>
-            </div>
-        </article>
+            <!-- Map 9 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_9.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 9">
+                <div class="card-details">
+                    <h3>HARO RIVER BASIN - HYDROLOGICAL VEINS KHANPUR</h3>
+                    <p>Tracking the pulse of the region's aquatic infrastructure.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_17.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Survey & Record">
-            <div class="card-details">
-                <h3>DIGITAL CADASTRAL SURVEY & RECORD</h3>
-                <p>Bridging Legacy Records with Digital Accuracy.</p>
-            </div>
-        </article>
+            <!-- Map 10 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_10.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 10">
+                <div class="card-details">
+                    <h3>VOLUMETRIC THERMAL MAPPING - ALTITUDE VS. EMISSION IN AJK</h3>
+                    <p>Visualizing microclimates and urban heat distribution through high-resolution spatial extrusion.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_18.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Indus Deluge">
-            <div class="card-details">
-                <h3>THE GREAT INDUS DELUGE: 2026</h3>
-                <p>Rapid Flood Extent Mapping derived from Multi-Temporal Sentinel-1 SAR Imagery.</p>
-            </div>
-        </article>
+            <!-- Map 11 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_11.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 11">
+                <div class="card-details">
+                    <h3>THE HUMAN FOOTPRINT - POPULATION DENSITY OF PAKISTAN</h3>
+                    <p>The Density and Distribution of Human Settlement</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_19.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Next-Gen Revenue">
-            <div class="card-details">
-                <h3>NEXT-GEN REVENUE RECORDS</h3>
-                <p>A Hybrid Geospatial Framework for Accurate Land Revenue Analysis and Boundary Verification.</p>
-            </div>
-        </article>
+            <!-- Map 12 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_12.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 12">
+                <div class="card-details">
+                    <h3>NEXT-GEN REVENUE RECORDS: MULTI-DIMENSIONAL CADASTRAL DIGITIZATION</h3>
+                    <p>A Hybrid Geospatial Framework for Accurate Land Revenue Analysis and Boundary Verification</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_20.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Urban Expansion">
-            <div class="card-details">
-                <h3>URBAN EXPANSION VS. RIPARIAN CORRIDOR</h3>
-                <p>A 2KM Buffer Geospatial Analysis: A digital lens on sustainable land management.</p>
-            </div>
-        </article>
+            <!-- Map 13 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_13.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 13">
+                <div class="card-details">
+                    <h3>GEOSPATIAL RECTIFICATION - DIGITAL NISHANDEHI PLAN OF SELECTED KHASRAS</h3>
+                    <p>Precision alignment and boundary dimensioning based on the traditional 30-Karam & 150 Karam grid system.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_21.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Geospatial Rectification">
-            <div class="card-details">
-                <h3>GEOSPATIAL RECTIFICATION - DIGITAL NISHANDEHI</h3>
-                <p>Precision alignment and boundary dimensioning based on the traditional 30-Karam & 150 Karam grid system.</p>
-            </div>
-        </article>
+            <!-- Map 14 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_14.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 14">
+                <div class="card-details">
+                    <h3>URBAN EXPANSION VS. RIPARIAN CORRIDOR: A 2KM BUFFER GEOSPATIAL ANALYSIS</h3>
+                    <p>A digital lens on sustainable land management.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_22.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Human Footprint">
-            <div class="card-details">
-                <h3>THE HUMAN FOOTPRINT</h3>
-                <p>The Density and Distribution of Human Settlement - Population Density of Pakistan.</p>
-            </div>
-        </article>
+            <!-- Map 15 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_15.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 15">
+                <div class="card-details">
+                    <h3>UNIFIED LAND RECORD & CADASTRAL INDEX</h3>
+                    <p>Modernizing Tenure with Geospatial Integrity.</p>
+                </div>
+            </article>
 
-        <article class="map-card" onclick="openLightbox(this)">
-            <div class="anti-theft-layer"></div>
-            <img src="Map_23.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Advanced Spatial Analysis">
-            <div class="card-details">
-                <h3>ADVANCED SPATIAL ANALYSIS</h3>
-                <p>High-accuracy geospatial deliverables and customized thematic mapping.</p>
-            </div>
-        </article>
+            <!-- Map 16 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_16.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 16">
+                <div class="card-details">
+                    <h3>DIGITAL CADASTRAL SURVEY & RECORD</h3>
+                    <p>Bridging Legacy Records with Digital Accuracy</p>
+                </div>
+            </article>
 
-    </main>
+            <!-- Map 17 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_17.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 17">
+                <div class="card-details">
+                    <h3>THE GREAT INDUS DELUGE: 2026 FLOOD INUNDATION ANALYSIS OF THE UPPER BASIN</h3>
+                    <p>Rapid Flood Extent Mapping derived from Multi-Temporal Sentinel-1 SAR Imagery</p>
+                </div>
+            </article>
+
+            <!-- Map 18 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_18.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 18">
+                <div class="card-details">
+                    <h3>SPATIO-TEMPORAL SOIL PRODUCTIVITY TRENDS: WESTERN HIMALAYAN FOOTHILLS</h3>
+                    <p>Evaluating 7-Year Landscape Productivity Dynamics using Cloud-Based Remote Sensing (2017-2024)</p>
+                </div>
+            </article>
+
+            <!-- Map 19 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_19.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 19">
+                <div class="card-details">
+                    <h3>DIGITAL CADASTRAL MAP OF MOUZA TEHSIL RAWALPINDI</h3>
+                    <p>Visualizing the cadastral boundaries of Mouza.</p>
+                </div>
+            </article>
+
+            <!-- Map 20 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_20.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 20">
+                <div class="card-details">
+                    <h3>MULTI-CADASTRAL COHESION FRAMEWORK & VISUALIZATION</h3>
+                    <p>Advanced spatial digitization and structural land revenue mapping, Rawalpindi Division</p>
+                </div>
+            </article>
+
+            <!-- Map 21 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_21.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 21">
+                <div class="card-details">
+                    <h3>LATHA MAP DIGITAL TRANSFORMATION</h3>
+                    <p>Bringing traditional Latha maps into the digital age with vector tracing and geospatial accuracy.</p>
+                </div>
+            </article>
+
+            <!-- Map 22 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_22.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 22">
+                <div class="card-details">
+                    <h3>TERRITORIAL MAPPING OF RAWALPINDI DIVISION</h3>
+                    <p>Detailed Delineation of Rawalpindi's Administrative Zones.</p>
+                </div>
+            </article>
+
+            <!-- Map 23 -->
+            <article class="map-card" onclick="openLightbox(this)">
+                <div class="anti-theft-layer"></div>
+                <img src="Map_23.jpg" onerror="this.src='https://via.placeholder.com/800x600/1f2937/0ea5e9?text=Map+Upload+Pending'" alt="Map 23">
+                <div class="card-details">
+                    <h3>TOPOGRAPHY AND DRAINAGE NETWORK OF KHYBER PAKHTUNKHWA, PAKISTAN</h3>
+                    <p>Hypsometric and Strahler Stream Order Classification.</p>
+                </div>
+            </article>
+
+        </div>
+    </section>
 
     <footer>
-        <p>&copy; 2026 Muhammad Waleed. All Rights Reserved. Data and Maps are strictly protected.</p>
+        <p>&copy; 2026 Muhammad Waleed[cite: 1]. All Rights Reserved. Mapping data is strictly protected.</p>
     </footer>
 
+    <!-- Lightbox Code -->
     <div id="lightbox" onclick="closeLightbox(event)">
         <div class="lightbox-wrapper">
             <span class="close-btn" onclick="closeLightbox(event)">&times;</span>
@@ -455,36 +634,21 @@
 
     <script>
         function openLightbox(element) {
-            // Click ki hui card ki image ka Source (src) lay ga
             const imgSrc = element.querySelector('img').src;
             const lightbox = document.getElementById('lightbox');
             const lightboxImg = document.getElementById('lightbox-img');
-            
-            // Bari image ko wo source de dega
             lightboxImg.src = imgSrc;
-            
-            // Lightbox show karega
             lightbox.style.display = 'flex';
-            
-            // Halki si animation ke liye timeout
-            setTimeout(() => {
-                lightbox.style.opacity = '1';
-            }, 10);
+            setTimeout(() => { lightbox.style.opacity = '1'; }, 10);
         }
-
         function closeLightbox(event) {
             const lightbox = document.getElementById('lightbox');
-            
-            // Fade out effect
             lightbox.style.opacity = '0';
-            
-            // Pura close karna (animation time ke hisab se 300ms baad)
             setTimeout(() => {
                 lightbox.style.display = 'none';
-                document.getElementById('lightbox-img').src = ''; // Image hata dega
+                document.getElementById('lightbox-img').src = '';
             }, 300);
         }
     </script>
-
 </body>
 </html>
