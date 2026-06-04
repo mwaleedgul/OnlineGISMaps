@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muhammad Waleed | Geospatial & Cadastral Portfolio</title>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
@@ -77,6 +76,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             aspect-ratio: 4/3;
+            cursor: pointer; /* Pointer to show it's clickable */
         }
 
         .map-card:hover {
@@ -146,6 +146,62 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
+        /* LIGHTBOX (Zoom Image) STYLING */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(2, 6, 23, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .lightbox-wrapper {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-wrapper img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            pointer-events: none; /* Anti-theft in zoom mode */
+            -webkit-user-drag: none;
+        }
+
+        /* Anti-theft layer for the zoomed image */
+        .lightbox-anti-theft {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1001;
+            background: transparent;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1002;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--accent);
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -160,10 +216,13 @@
             .portfolio-container {
                 grid-template-columns: 1fr;
             }
+            .close-btn {
+                top: -30px;
+                right: 10px;
+            }
         }
     </style>
 </head>
-<!-- Global Right Click & Selection Disable -->
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
     <header>
@@ -173,238 +232,207 @@
 
     <main class="portfolio-container">
         
-        <!-- ========================================== -->
-        <!-- REAL UPLOADED MAPS (1 to 10)               -->
-        <!-- ========================================== -->
-
-        <!-- Map 1 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="Map_1.jpg" alt="Territorial Mapping Rawalpindi">
+            <img src="Map_1.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Territorial Mapping">
             <div class="card-details">
                 <h3>TERRITORIAL MAPPING OF RAWALPINDI DIVISION</h3>
                 <p>Detailed Delineation of Rawalpindi's Administrative Zones.</p>
             </div>
         </article>
 
-        <!-- Map 2 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="Map_2.jpg" alt="Hypsometric Tinting Pakistan">
+            <img src="Map_2.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Hypsometric Tinting">
             <div class="card-details">
                 <h3>HYPSOMETRIC TINTING & RELIEF VISUALIZATION</h3>
                 <p>Utilizing SRTM Elevation data and high-resolution satellite imagery to visualize provincial terrain morphology.</p>
             </div>
         </article>
 
-        <!-- Map 3 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="Map_3.jpg" alt="Cadastral Masavi Map">
+            <img src="Map_3.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Spatial Terrain">
             <div class="card-details">
                 <h3>Spatial Terrain & Revenue Framework</h3>
                 <p>Integrated Land Parcel & Terrain Visualization</p>
             </div>
         </article>
 
-        <!-- Map 4 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="679555516_943491158566438_248526698661207118_n.jpg" alt="Terrain Morphology Rawalakot">
+            <img src="Map_4.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Terrain Morphology">
             <div class="card-details">
                 <h3>TERRAIN MORPHOLOGY</h3>
                 <p>Visualizing the intricate relief of the Lesser Himalayas through multi-stage geospatial rendering.</p>
             </div>
         </article>
 
-        <!-- Map 5 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="684434242_947528484829372_5416094810072020421_n.jpg" alt="Mouza Level Analysis">
+            <img src="Map_5.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Mouza Level">
             <div class="card-details">
                 <h3>Mouza-Level Analysis</h3>
                 <p>Strategic Boundary Mapping: Selected Sectors of Rawalpindi.</p>
             </div>
         </article>
 
-        <!-- Map 6 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="684990034_948735934708627_82596318351551221_n.jpg" alt="Grid Based Sampling">
+            <img src="Map_6.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Accuracy Assessment">
             <div class="card-details">
                 <h3>ACCURACY ASSESSMENT OF GEOREFERENCED CADASTRAL MAP</h3>
                 <p>Bridging the Gap Between Paper Records and Pixel Precision using Grid-Based Sampling.</p>
             </div>
         </article>
 
-        <!-- Map 7 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="685253824_950299954552225_2459746389539624348_n.jpg" alt="Haro River Basin">
+            <img src="Map_7.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Haro River Basin">
             <div class="card-details">
                 <h3>HARO RIVER BASIN - HYDROLOGICAL VEINS KHANPUR</h3>
                 <p>Tracking the pulse of the region's aquatic infrastructure.</p>
             </div>
         </article>
 
-        <!-- Map 8 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="688069685_953742844207936_1891211218126758971_n.jpg" alt="Thermal Mapping AJK">
+            <img src="Map_8.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Thermal Mapping">
             <div class="card-details">
                 <h3>VOLUMETRIC THERMAL MAPPING - ALTITUDE VS. EMISSION IN AJK</h3>
                 <p>Visualizing microclimates and urban heat distribution through high-resolution spatial extrusion.</p>
             </div>
         </article>
 
-        <!-- Map 9 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="675289221_942692278646326_7108822098553910537_n.jpg" alt="Pothwar Plateau">
+            <img src="Map_9.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Pothwar Plateau">
             <div class="card-details">
                 <h3>The Sculpted Terrain of Northern Punjab</h3>
                 <p>The Pothwar Plateau high-resolution relief visualization.</p>
             </div>
         </article>
 
-        <!-- Map 10 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="671966955_938697122379175_5599153203693239979_n.jpg" alt="Wind Velocity">
+            <img src="Map_10.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Wind Velocity">
             <div class="card-details">
                 <h3>Spatial Analysis of Wind Velocity & Flow Patterns</h3>
                 <p>Visualizing meteorological flow directions across complex topographies.</p>
             </div>
         </article>
 
-        <!-- ========================================== -->
-        <!-- DUMMY SLOTS FOR FUTURE UPLOADS (11 to 23)  -->
-        <!-- ========================================== -->
-
-        <!-- Map 11 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_11.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="KPK Drainage">
             <div class="card-details">
                 <h3>TOPOGRAPHY AND DRAINAGE NETWORK OF KPK</h3>
                 <p>Hypsometric and Strahler Stream Order Classification.</p>
             </div>
         </article>
 
-        <!-- Map 12 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_12.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Latha Map">
             <div class="card-details">
                 <h3>LATHA MAP DIGITAL TRANSFORMATION</h3>
                 <p>Bringing traditional Latha maps into the digital age with vector tracing and geospatial accuracy.</p>
             </div>
         </article>
 
-        <!-- Map 13 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_13.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Soil Productivity">
             <div class="card-details">
                 <h3>SPATIO-TEMPORAL SOIL PRODUCTIVITY TRENDS</h3>
                 <p>Evaluating 7-Year Landscape Productivity Dynamics using Cloud-Based Remote Sensing (2017-2024).</p>
             </div>
         </article>
 
-        <!-- Map 14 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_14.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Multi-Cadastral">
             <div class="card-details">
                 <h3>MULTI-CADASTRAL COHESION FRAMEWORK</h3>
                 <p>Advanced spatial digitization and structural land revenue mapping, Rawalpindi Division.</p>
             </div>
         </article>
 
-        <!-- Map 15 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_15.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Mouza Map">
             <div class="card-details">
                 <h3>DIGITAL CADASTRAL MAP OF MOUZA</h3>
                 <p>Visualizing the cadastral boundaries of Mouza, Tehsil Rawalpindi.</p>
             </div>
         </article>
 
-        <!-- Map 16 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_16.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Unified Land Record">
             <div class="card-details">
                 <h3>UNIFIED LAND RECORD & CADASTRAL INDEX</h3>
                 <p>Modernizing Tenure with Geospatial Integrity.</p>
             </div>
         </article>
 
-        <!-- Map 17 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_17.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Survey & Record">
             <div class="card-details">
                 <h3>DIGITAL CADASTRAL SURVEY & RECORD</h3>
                 <p>Bridging Legacy Records with Digital Accuracy.</p>
             </div>
         </article>
 
-        <!-- Map 18 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_18.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Indus Deluge">
             <div class="card-details">
                 <h3>THE GREAT INDUS DELUGE: 2026</h3>
                 <p>Rapid Flood Extent Mapping derived from Multi-Temporal Sentinel-1 SAR Imagery.</p>
             </div>
         </article>
 
-        <!-- Map 19 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_19.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Next-Gen Revenue">
             <div class="card-details">
                 <h3>NEXT-GEN REVENUE RECORDS</h3>
                 <p>A Hybrid Geospatial Framework for Accurate Land Revenue Analysis and Boundary Verification.</p>
             </div>
         </article>
 
-        <!-- Map 20 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_20.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Urban Expansion">
             <div class="card-details">
                 <h3>URBAN EXPANSION VS. RIPARIAN CORRIDOR</h3>
                 <p>A 2KM Buffer Geospatial Analysis: A digital lens on sustainable land management.</p>
             </div>
         </article>
 
-        <!-- Map 21 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_21.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Geospatial Rectification">
             <div class="card-details">
                 <h3>GEOSPATIAL RECTIFICATION - DIGITAL NISHANDEHI</h3>
                 <p>Precision alignment and boundary dimensioning based on the traditional 30-Karam & 150 Karam grid system.</p>
             </div>
         </article>
 
-        <!-- Map 22 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_22.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Human Footprint">
             <div class="card-details">
                 <h3>THE HUMAN FOOTPRINT</h3>
                 <p>The Density and Distribution of Human Settlement - Population Density of Pakistan.</p>
             </div>
         </article>
 
-        <!-- Map 23 -->
-        <article class="map-card">
+        <article class="map-card" onclick="openLightbox(this)">
             <div class="anti-theft-layer"></div>
-            <img src="https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending" alt="Dummy Map">
+            <img src="Map_23.jpg" onerror="this.src='https://via.placeholder.com/800x600/1e293b/38bdf8?text=Map+Upload+Pending'" alt="Advanced Spatial Analysis">
             <div class="card-details">
                 <h3>ADVANCED SPATIAL ANALYSIS</h3>
                 <p>High-accuracy geospatial deliverables and customized thematic mapping.</p>
@@ -416,6 +444,47 @@
     <footer>
         <p>&copy; 2026 Muhammad Waleed. All Rights Reserved. Data and Maps are strictly protected.</p>
     </footer>
+
+    <div id="lightbox" onclick="closeLightbox(event)">
+        <div class="lightbox-wrapper">
+            <span class="close-btn" onclick="closeLightbox(event)">&times;</span>
+            <div class="lightbox-anti-theft"></div>
+            <img id="lightbox-img" src="" alt="Enlarged View">
+        </div>
+    </div>
+
+    <script>
+        function openLightbox(element) {
+            // Click ki hui card ki image ka Source (src) lay ga
+            const imgSrc = element.querySelector('img').src;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            
+            // Bari image ko wo source de dega
+            lightboxImg.src = imgSrc;
+            
+            // Lightbox show karega
+            lightbox.style.display = 'flex';
+            
+            // Halki si animation ke liye timeout
+            setTimeout(() => {
+                lightbox.style.opacity = '1';
+            }, 10);
+        }
+
+        function closeLightbox(event) {
+            const lightbox = document.getElementById('lightbox');
+            
+            // Fade out effect
+            lightbox.style.opacity = '0';
+            
+            // Pura close karna (animation time ke hisab se 300ms baad)
+            setTimeout(() => {
+                lightbox.style.display = 'none';
+                document.getElementById('lightbox-img').src = ''; // Image hata dega
+            }, 300);
+        }
+    </script>
 
 </body>
 </html>
